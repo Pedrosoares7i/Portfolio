@@ -10,6 +10,14 @@
 </head>
 
 <body>
+    <!-- Efeitos de fundo animados que percorrem o site inteiro -->
+    <div class="bg-orb orb-1" aria-hidden="true"></div>
+    <div class="bg-orb orb-2" aria-hidden="true"></div>
+    <div class="bg-orb orb-3" aria-hidden="true"></div>
+
+    <!-- Barra de progresso de rolagem -->
+    <div class="scroll-progress" aria-hidden="true"></div>
+
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">PS</a>
@@ -29,20 +37,35 @@
     </nav>
 
     <section id="home" class="hero">
-        <div class="hero-content">
-            <p class="hero-greeting">Olá, eu sou</p>
-            <h1 class="hero-name">Pedro Soares</h1>
-            <p class="hero-role">Desenvolvedor de Sistemas</p>
-            <p class="hero-desc">Unindo tecnologia, design e resolução de problemas para criar soluções digitais que
-                fazem diferença.</p>
-            <div class="hero-buttons">
-                <a href="#projects" class="btn btn-primary">Ver Projetos</a>
-                <a href="#contact" class="btn btn-secondary">Fale Comigo</a>
+        <div class="hero-inner">
+            <div class="hero-content">
+                <p class="hero-greeting">Olá, eu sou</p>
+                <h1 class="hero-name">Pedro Soares</h1>
+                <p class="hero-role">Desenvolvedor de Sistemas</p>
+                <p class="hero-desc">Unindo tecnologia, design e resolução de problemas para criar soluções digitais
+                    que fazem diferença.</p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">Ver Projetos</a>
+                    <a href="#contact" class="btn btn-secondary">Fale Comigo</a>
+                </div>
+            </div>
+
+            <!--
+                AJUSTE AQUI O CAMINHO DA IMAGEM:
+                O arquivo atual é "img/Desenho(sem fundo).png".
+                Se o nome real do arquivo for diferente (ex.: foto.png),
+                altere apenas o valor dentro de src="".
+            -->
+            <div class="hero-visual">
+                <span class="hero-glow" aria-hidden="true"></span>
+                <span class="hero-glow hero-glow-2" aria-hidden="true"></span>
+                <span class="hero-ring" aria-hidden="true"></span>
+                <img src="img/Desenho(sem fundo).png" alt="Foto de Pedro Soares" class="hero-portrait">
             </div>
         </div>
     </section>
 
-    <section id="about" class="about">
+    <section id="about" class="about reveal">
         <div class="container">
             <h2 class="section-title">Sobre Mim</h2>
             <div class="about-content">
@@ -57,15 +80,15 @@
                 </div>
                 <div class="about-stats">
                     <div class="stat-card">
-                        <span class="stat-number">+</span>
+                        <span class="stat-number" data-count="5">+</span>
                         <span class="stat-label">Projetos</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-number">2+</span>
+                        <span class="stat-number" data-count="2">+</span>
                         <span class="stat-label">Anos de Estudo</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-number">5+</span>
+                        <span class="stat-number" data-count="5">+</span>
                         <span class="stat-label">Tecnologias</span>
                     </div>
                 </div>
@@ -73,7 +96,7 @@
         </div>
     </section>
 
-    <section id="skills" class="skills">
+    <section id="skills" class="skills reveal">
         <div class="container">
             <h2 class="section-title">Habilidades</h2>
             <div class="skills-grid">
@@ -117,7 +140,7 @@
         </div>
     </section>
 
-    <section id="projects" class="projects">
+    <section id="projects" class="projects reveal">
         <div class="container">
             <h2 class="section-title">Projetos</h2>
             <p class="section-subtitle">Mais do que dominar ferramentas, quero construir projetos reais e transformar
@@ -216,7 +239,7 @@
         </div>
     </section>
 
-    <section id="contact" class="contact">
+    <section id="contact" class="contact reveal">
         <div class="container">
             <h2 class="section-title">Contato</h2>
             <p class="section-subtitle">Estou aberto a conexões, projetos, networking e oportunidades de aprendizado.
@@ -225,26 +248,39 @@
                 <div class="contact-links">
                     <a href="mailto:pedrosoaresbc4@gmail.com" class="contact-item">
                         <span class="contact-icon">&#9993;</span>
-                        <span>pedrosoaresbc4@gmail.com</span>
+                        <div class="contact-meta">
+                            <span class="contact-label">Email</span>
+                            <span class="contact-value">pedrosoaresbc4@gmail.com</span>
+                        </div>
                     </a>
                     <a href="https://www.linkedin.com/in/pedro-soares-a887a7323/" target="_blank" class="contact-item">
                         <span class="contact-icon">in</span>
-                        <span>LinkedIn</span>
+                        <div class="contact-meta">
+                            <span class="contact-label">LinkedIn</span>
+                            <span class="contact-value">Pedro Soares</span>
+                        </div>
                     </a>
                     <a href="https://github.com/Pedrosoares7i" target="_blank" class="contact-item">
                         <span class="contact-icon">&#9679;</span>
-                        <span>GitHub</span>
+                        <div class="contact-meta">
+                            <span class="contact-label">GitHub</span>
+                            <span class="contact-value">Pedrosoares7i</span>
+                        </div>
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="container">
+    <footer class="footer reveal">
+        <div class="container footer-inner">
             <p>&copy; 2026 Pedro Soares. Todos os direitos reservados.</p>
+            <a href="#home" class="back-to-top" aria-label="Voltar ao topo">&#8593;</a>
         </div>
     </footer>
+
+    <!-- Botão flutuante voltar ao topo -->
+    <button id="toTopBtn" class="to-top" aria-label="Voltar ao topo">&#8593;</button>
 
     <script src="main.js"></script>
 </body>

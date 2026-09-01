@@ -100,7 +100,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    text-align: left;
     padding: 120px 24px 60px;
     background: linear-gradient(180deg, var(--bg) 0%, var(--bg-light) 100%);
     position: relative;
@@ -117,8 +117,35 @@ body {
     background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
 }
 
+/* Grade tecnológica sutil que desliza dentro do hero */
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(99, 102, 241, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.06) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 45%, transparent 15%, black 75%);
+    mask-image: radial-gradient(ellipse at 50% 45%, transparent 15%, black 75%);
+    animation: gridShift 24s linear infinite;
+    pointer-events: none;
+}
+
+.hero-inner {
+    max-width: 1100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+    position: relative;
+    z-index: 1;
+}
+
 .hero-content {
-    max-width: 700px;
+    flex: 1;
+    max-width: 600px;
     position: relative;
     z-index: 1;
 }
@@ -131,10 +158,17 @@ body {
     text-transform: uppercase;
 }
 
+/* Nome com brilho gradiente em movimento */
 .hero-name {
     font-size: clamp(2.5rem, 6vw, 4.5rem);
     font-weight: 700;
     margin-bottom: 8px;
+    background: linear-gradient(90deg, #e2e2f0 0%, #a5b4fc 30%, #8b5cf6 50%, #818cf8 65%, #e2e2f0 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: nameShimmer 7s linear infinite;
 }
 
 .hero-role {
@@ -148,60 +182,295 @@ body {
     font-size: 1.1rem;
     margin-bottom: 36px;
     max-width: 550px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .hero-buttons {
     display: flex;
     gap: 16px;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
+}
+
+/* ===== VISUAL + BRILHO DO RETRATO ===== */
+.hero-visual {
+    flex: 1;
+    max-width: 460px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Brilho circular difuso atrás da foto (fico atrás via z-index) */
+.hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 62vmin;
+    height: 62vmin;
+    max-width: 560px;
+    max-height: 560px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        rgba(99, 102, 241, 0.45) 0%,
+        rgba(56, 92, 246, 0.22) 35%,
+        transparent 70%);
+    filter: blur(70px);
+    z-index: 0;
+    pointer-events: none;
+    animation: glowPulse 6s ease-in-out infinite;
+}
+
+/* Brilho discreto na base, acompanhando a parte de baixo da foto */
+.hero-glow-2 {
+    top: auto;
+    bottom: -8%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 42vmin;
+    height: 42vmin;
+    max-width: 380px;
+    max-height: 380px;
+    background: radial-gradient(circle,
+        rgba(129, 140, 248, 0.35) 0%,
+        transparent 70%);
+    animation: glowPulse2 7s ease-in-out infinite;
+}
+
+/* Anel circular tecnológico orbitando a foto */
+.hero-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(52vh, 450px);
+    height: min(52vh, 450px);
+    border: 1px solid rgba(99, 102, 241, 0.22);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    animation: ringSpin 22s linear infinite;
+}
+
+.hero-ring::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 14px var(--primary), 0 0 30px rgba(99, 102, 241, 0.6);
+}
+
+/* IMAGE - preserva transparência (PNG), sem moldura e sem distorção */
+.hero-portrait {
+    position: relative;
+    z-index: 1;
+    width: min(46vh, 380px);
+    height: auto;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 34px 54px rgba(79, 70, 229, 0.38));
+    animation: portraitFloat 6s ease-in-out infinite;
+
+    /*
+        Suaviza a "linha reta" na base da imagem (imagem cortada na altura do peito).
+        Fade gradativo nas últimas ~20%: a borda inferior some suavemente,
+        misturando a foto com o fundo escuro.
+    */
+    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+/* ===== ORBES GLOBAIS ===== */
+/*
+    Efeitos fixos e animados que percorrem o site inteiro.
+    Usam mix-blend-mode: screen para brilhar suavemente sobre as seções.
+*/
+.bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    mix-blend-mode: screen;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.orb-1 {
+    width: 45vw;
+    height: 45vw;
+    max-width: 640px;
+    max-height: 640px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.5) 0%, transparent 70%);
+    top: -12%;
+    left: -8%;
+    animation: orbFloat1 26s ease-in-out infinite;
+}
+
+.orb-2 {
+    width: 38vw;
+    height: 38vw;
+    max-width: 560px;
+    max-height: 560px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, transparent 70%);
+    bottom: -14%;
+    right: -10%;
+    animation: orbFloat2 32s ease-in-out infinite;
+}
+
+.orb-3 {
+    width: 30vw;
+    height: 30vw;
+    max-width: 440px;
+    max-height: 440px;
+    background: radial-gradient(circle, rgba(167, 139, 250, 0.38) 0%, transparent 70%);
+    top: 40%;
+    left: 58%;
+    animation: orbFloat3 38s ease-in-out infinite;
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes orbFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(8vw, 12vh) scale(1.15); }
+    66% { transform: translate(4vw, -5vh) scale(0.9); }
+}
+
+@keyframes orbFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-10vw, -10vh) scale(1.2); }
+}
+
+@keyframes orbFloat3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-6vw, 8vh) scale(1.15); }
+}
+
+@keyframes gridShift {
+    from { background-position: 0 0; }
+    to { background-position: 64px 64px; }
+}
+
+@keyframes nameShimmer {
+    to { background-position: 200% center; }
+}
+
+@keyframes portraitFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+}
+
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@keyframes glowPulse2 {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+@keyframes ringSpin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 /* BUTTONS */
 .btn {
     display: inline-block;
     padding: 14px 32px;
-    border-radius: 8px;
+    border-radius: 50px;
     font-size: 0.95rem;
     font-weight: 500;
     text-decoration: none;
     transition: all 0.3s;
     border: none;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
+/* Botão primário com gradiente e brilho */
 .btn-primary {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: #fff;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s;
 }
 
 .btn-primary:hover {
-    background: var(--primary-dark);
     transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5);
+}
+
+.btn-primary:hover::after {
+    left: 130%;
 }
 
 .btn-secondary {
     background: transparent;
     color: var(--text);
     border: 1px solid var(--border);
+    border-radius: 50px;
 }
 
 .btn-secondary:hover {
     border-color: var(--primary);
     color: var(--primary);
+    background: rgba(99, 102, 241, 0.08);
+    transform: translateY(-2px);
 }
 
 .btn-small {
     padding: 8px 20px;
     font-size: 0.85rem;
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: #fff;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
 }
 
 .btn-small:hover {
     background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* BARRA DE PROGRESSO DE ROLAGEM */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary), #22d3ee);
+    z-index: 2000;
+    transition: width 0.1s linear;
+}
+
+/* REVEAL ON SCROLL */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* SECTIONS */
@@ -222,7 +491,7 @@ section {
     display: block;
     width: 60px;
     height: 4px;
-    background: var(--primary);
+    background: linear-gradient(90deg, var(--primary), #22d3ee);
     margin: 12px auto 0;
     border-radius: 2px;
 }
@@ -260,21 +529,25 @@ section {
 .stat-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 24px;
     text-align: center;
-    transition: transform 0.3s, border-color 0.3s;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
 .stat-card:hover {
     transform: translateY(-5px);
     border-color: var(--primary);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.2);
 }
 
 .stat-number {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     font-weight: 700;
-    color: var(--primary);
+    background: linear-gradient(90deg, var(--primary), #22d3ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
     display: block;
 }
 
@@ -293,21 +566,44 @@ section {
 .skill-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
+    border-radius: 18px;
+    padding: 32px;
     text-align: center;
-    transition: transform 0.3s, border-color 0.3s;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Brilho topo no hover */
+.skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), #22d3ee);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
 }
 
 .skill-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-6px);
     border-color: var(--primary);
+    box-shadow: 0 16px 40px rgba(99, 102, 241, 0.18);
+}
+
+.skill-card:hover::before {
+    transform: scaleX(1);
 }
 
 .skill-icon {
-    font-size: 2rem;
+    font-size: 2.2rem;
     margin-bottom: 16px;
     display: block;
+    color: var(--primary);
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
 }
 
 .skill-card h3 {
@@ -319,15 +615,22 @@ section {
     flex-wrap: wrap;
     gap: 8px;
     justify-content: center;
+    margin-top: 4px;
 }
 
 .skill-tags span {
-    background: var(--bg-light);
+    background: rgba(99, 102, 241, 0.08);
     border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 4px 14px;
+    padding: 5px 14px;
     font-size: 0.8rem;
     color: var(--text-muted);
+    transition: 0.3s;
+}
+
+.skill-tags span:hover {
+    border-color: var(--primary);
+    color: var(--primary);
 }
 
 /* PROJECTS */
@@ -344,16 +647,18 @@ section {
 .project-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
-    transition: transform 0.3s, border-color 0.3s;
+    transition: transform 0.4s, border-color 0.3s, box-shadow 0.4s;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .project-card:hover {
-    transform: translateY(-6px);
+    transform: translateY(-8px);
     border-color: var(--primary);
+    box-shadow: 0 20px 50px rgba(99, 102, 241, 0.2);
 }
 
 .project-image {
@@ -363,6 +668,22 @@ section {
     justify-content: flex-end;
     padding: 16px;
     position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #23233a, #2a2a3e);
+}
+
+/* Sobreposição de brilho sutil no topo do projeto */
+.project-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.15), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.project-card:hover .project-image::after {
+    opacity: 1;
 }
 
 .project-badge {
@@ -423,34 +744,62 @@ section {
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    max-width: 400px;
+    max-width: 480px;
     margin: 0 auto;
 }
 
 .contact-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 18px;
     color: var(--text-muted);
     text-decoration: none;
-    padding: 16px 24px;
+    padding: 18px 26px;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 14px;
     width: 100%;
     transition: all 0.3s;
+    text-align: left;
 }
 
 .contact-item:hover {
     border-color: var(--primary);
     color: var(--text);
-    transform: translateX(5px);
+    transform: translateX(6px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);
+    background: rgba(99, 102, 241, 0.06);
 }
 
 .contact-icon {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: var(--primary);
-    min-width: 28px;
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 12px;
+}
+
+.contact-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.contact-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.contact-value {
+    font-size: 0.95rem;
+    color: var(--text);
 }
 
 /* FOOTER */
@@ -460,6 +809,51 @@ section {
     text-align: center;
     color: var(--text-muted);
     font-size: 0.85rem;
+}
+
+.footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Botão flutuante voltar ao topo */
+.to-top {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition: all 0.3s;
+    z-index: 1500;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.to-top:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    transform: translateY(-3px);
 }
 
 /* RESPONSIVE */
@@ -485,6 +879,39 @@ section {
         display: flex;
     }
 
+    .hero {
+        text-align: center;
+    }
+
+    .hero-inner {
+        flex-direction: column;
+        gap: 40px;
+        justify-content: center;
+    }
+
+    /* Foto aparece acima do texto em telas menores */
+    .hero-visual {
+        order: -1;
+    }
+
+    .hero-desc {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .hero-portrait {
+        width: min(38vh, 280px);
+    }
+
+    .hero-ring {
+        width: min(42vh, 320px);
+        height: min(42vh, 320px);
+    }
+
     .about-content {
         grid-template-columns: 1fr;
         gap: 32px;
@@ -502,5 +929,13 @@ section {
 @media (max-width: 480px) {
     .about-stats {
         grid-template-columns: 1fr;
+    }
+
+    .hero-portrait {
+        width: min(34vh, 230px);
+    }
+
+    .bg-orb {
+        opacity: 0.35;
     }
 }
